@@ -1,0 +1,33 @@
+services:
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: sample-app-compose
+    ports:
+      - "8080:80"
+    networks:
+      - app-network
+    volumes:
+      - app-data:/app/data
+    depends_on:
+      - db
+
+  db:
+    image: mysql:8.4
+    container_name: mysql-compose
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: sampledb
+    networks:
+      - app-network
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+networks:
+  app-network:
+
+volumes:
+  app-data:
+  mysql-data:
