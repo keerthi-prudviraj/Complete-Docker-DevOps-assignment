@@ -1,5 +1,9 @@
 pipeline {
-    agent {label "dev"};
+    agent { label "dev" }
+
+    options {
+        skipDefaultCheckout(true)
+    }
 
     stages {
 
@@ -24,21 +28,22 @@ pipeline {
             }
         }
 
-        stage("Push to docker hub") {
+        stage("Push to Docker Hub") {
             steps {
-                withCredentials([usernamePassword(
-                    credentialsId: "dockerHubcredsAP",
-                    usernameVariable: "dockerHubUser",
-                    passwordVariable: "dockerHubPass"
-                )]) {
-        
+                withCredentials([
+                    usernamePassword(
+                        credentialsId: "dockerHubcredsAP",
+                        usernameVariable: "dockerHubUser",
+                        passwordVariable: "dockerHubPass"
+                    )
+                ]) {
                     sh '''
                         echo "$dockerHubPass" | docker login -u "$dockerHubUser" --password-stdin
-        
+
                         docker tag my-app:latest "$dockerHubUser/complete-docker-devops-assignment:latest"
-        
+
                         docker push "$dockerHubUser/complete-docker-devops-assignment:latest"
-        
+
                         docker logout
                     '''
                 }
