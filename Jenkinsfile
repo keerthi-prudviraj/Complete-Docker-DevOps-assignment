@@ -56,4 +56,55 @@ pipeline {
             }
         }
     }
+
+    post {
+
+        success {
+            emailext(
+                to: "keerthiprudvi599@gmail.com",
+                subject: "SUCCESS: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                body: """
+Hello,
+
+Jenkins pipeline completed successfully.
+
+Job Name: ${env.JOB_NAME}
+Build Number: ${env.BUILD_NUMBER}
+Build Status: SUCCESS
+
+Build URL:
+${env.BUILD_URL}
+
+All stages completed successfully.
+
+Regards,
+Jenkins
+"""
+            )
+        }
+
+        failure {
+            emailext(
+                to: "keerthiprudvi599@gmail.com",
+                subject: "FAILED: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                body: """
+Hello,
+
+Jenkins pipeline has FAILED.
+
+Job Name: ${env.JOB_NAME}
+Build Number: ${env.BUILD_NUMBER}
+Build Status: FAILURE
+
+Please check the Jenkins console output.
+
+Build URL:
+${env.BUILD_URL}
+
+Regards,
+Jenkins
+"""
+            )
+        }
+    }
 }
