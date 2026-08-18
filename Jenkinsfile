@@ -18,7 +18,7 @@ pipeline {
 
         stage("Build") {
             steps {
-                sh "docker buil -t my-app:latest ."
+                sh "docker build -t my-app:latest ."
             }
         }
 
