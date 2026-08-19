@@ -28,6 +28,20 @@ pipeline {
             }
         }
 
+        stage("Trivy Security Scan") {
+            steps {
+                echo "Running Trivy security scan..."
+
+                sh '''
+                    trivy fs . -o results.json
+                    trivy image \
+                    --severity HIGH,CRITICAL \
+                    --format table \
+                    my-app:latest
+                '''
+            }
+        }
+
         stage("Push to Docker Hub") {
             steps {
                 withCredentials([
